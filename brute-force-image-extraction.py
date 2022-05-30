@@ -1,6 +1,9 @@
 from threading import Thread, Lock, current_thread
 from queue import Queue
 import time
+import os
+
+filename = 'Invitation Card.jpg'
 
 def load_word_list(wordlist_filename):
     print('[*] Loading wordlist')
@@ -13,14 +16,15 @@ def brute(wordlist, lock):
     while not wordlist.empty(): 
         word = wordlist.get()
         with lock:
-            print(current_thread().name, word)
+            print('[*]', current_thread().name, word)
+            os.system(f'steghide extract -sf {filename} -p {word}')
         wordlist.task_done()
 
 if __name__ == '__main__':
     start_time = time.time()
 
     wordlist = Queue()
-    load_word_list('rockyou.txt') # you may change this value
+    load_word_list('wordlist/testing.txt') # you may change this value
     threads_num = 100 # you may change this value
     lock = Lock()
     
